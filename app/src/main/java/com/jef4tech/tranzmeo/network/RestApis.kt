@@ -20,7 +20,7 @@ interface RestApis {
 
 
     @GET("users/{userid}")
-    suspend fun getUserData(@Path("userid") id: String): Response<UserData>
+    suspend fun getUserData(@Path("userid") id: Int): Response<UserData>
 
 
 }

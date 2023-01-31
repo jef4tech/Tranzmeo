@@ -16,9 +16,9 @@ class DashboardViewModel : ViewModel() {
     val errorMessage = MutableLiveData<String>()
     val userData = MutableLiveData<UserData>()
 
-    fun getUserData(userName: String) {
+    fun getUserData(userId: Int) {
         viewModelScope.launch {
-            val response = RestApiImpl.getUserData(userName)
+            val response = RestApiImpl.getUserData(userId)
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
                     userData.postValue(response.body())

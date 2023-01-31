@@ -11,7 +11,7 @@ import com.jef4tech.tranzmeo.utils.Extensions
  * @author jeffin
  * @date 30/01/23
  */
-class UserAdapter(private val listener: (user: UsersResponse.User) -> Unit): RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
+class UserAdapter(private val listener: (userId: Int) -> Unit): RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
     //    private var userList:List<UserResponse> = ArrayList()
     private var listData = ArrayList<UsersResponse.User>()
     inner class UserViewHolder(val custombind:AdapterUserBinding):RecyclerView.ViewHolder(custombind.root)
@@ -24,9 +24,11 @@ class UserAdapter(private val listener: (user: UsersResponse.User) -> Unit): Rec
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         val user = listData[position]
         holder.custombind.apply {
-            tvUserName.text = user.username
+            tvUserName.text = "UserName: "+user.username
+            tvEmail.text = "Email : "+user.email
+            tvMaiden.text = "Maiden Name: "+user.maidenName
             layout1.setOnClickListener{
-                listener.invoke(user)
+                listener.invoke(user.id)
             }
         }
         Extensions.loadImagefromUrl(holder.custombind.ivUser.context,holder.custombind.ivUser,user.image)
@@ -36,7 +38,7 @@ class UserAdapter(private val listener: (user: UsersResponse.User) -> Unit): Rec
         return listData.size
     }
 
-    fun setData(newListData: List<UsersResponse>, isLoading: Boolean){
+    fun setData(newListData: List<UsersResponse.User>, isLoading: Boolean){
         if (newListData == null) return
         if (!isLoading){
             listData.clear()
