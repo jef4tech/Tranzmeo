@@ -26,20 +26,30 @@ class DashboardFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val dashboardViewModel =
-            ViewModelProvider(this).get(DashboardViewModel::class.java)
+            ViewModelProvider(this)[DashboardViewModel::class.java]
         val userId= arguments?.getInt("Id")
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
         dashboardViewModel.getUserData(userId!!)
+        dashboardViewModel.loading.observe(viewLifecycleOwner){
+//            binding.progressBar.visibility = View.GONE
+            if(it){binding.progressBar.visibility = View.VISIBLE}else{
+                binding.progressBar.visibility = View.GONE
+                binding.layout.visibility = View.VISIBLE
+            }
+        }
         dashboardViewModel.userData.observe(viewLifecycleOwner) {
             binding.apply {
-                tvUserName.text = "User Name"+it.username
-                tvEmail.text = "Email"+it.email
-                tvFirstName.text = "First Name:"+it.firstName
-                tvLastName.text = "Last Name:"+it.lastName
-                tvAge.text = "Age:"+it.age.toString()
-                tvMaiden.text = "Maiden Name:"+it.maidenName
-                tvPhone.text = "Phone No:"+it.phone
+                tvUserName.text = it.username
+                tvEmail.text = it.email
+                tvFirstName.text = it.firstName
+                tvLastName.text = it.lastName
+                tvAge.text = it.age.toString()
+                tvMaiden.text = it.maidenName
+                tvPhone.text = it.phone
+                tvBirthday.text = it.birthDate
+                tvBlood.text = it.bloodGroup
+                tvGender.text = it.gender
 
             }
             Extensions.loadImagefromUrl(binding.ivUser.context,binding.ivUser,it.image)

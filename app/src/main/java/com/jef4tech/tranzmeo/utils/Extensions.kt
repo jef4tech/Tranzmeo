@@ -22,7 +22,7 @@ object Extensions {
         return isConnected
     }
     fun loadImagefromUrl(context: Context, imgView: ImageView, url:String){
-        Glide.with(context).load(url).apply( RequestOptions().override(100, 100)).fitCenter().into(imgView)
+        Glide.with(context).load(url).fitCenter().into(imgView)
     }
     fun showToast(message: String,context: Context) {
         val toast = Toast.makeText(context, message, Toast.LENGTH_SHORT)

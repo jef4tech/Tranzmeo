@@ -4,13 +4,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
+import androidx.paging.liveData
 import com.jef4tech.tranzmeo.models.UsersResponse
 import com.jef4tech.tranzmeo.network.RestApiImpl
+import com.jef4tech.tranzmeo.network.RetrofitClientFactory
+import com.jef4tech.tranzmeo.paging.PostDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(private val retrofitClientFactory: RetrofitClientFactory) : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is home Fragment"
@@ -19,6 +25,9 @@ class HomeViewModel : ViewModel() {
     val loader = MutableLiveData<Boolean>()
     val errorMessage = MutableLiveData<String>()
     val userList = MutableLiveData<UsersResponse>()
+    val listData = Pager(PagingConfig(pageSize = 10)) {
+        PostDataSource(RetrofitClientFactory)
+    }.liveData.cachedIn(viewModelScope)
 
     fun getUserList(limit: Int, skip: Int) {
         loader.value = true
